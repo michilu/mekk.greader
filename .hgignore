@@ -3,6 +3,6 @@ syntax: regexp
 ~$
 semantic\.cache$
 \.py[co]$
-^src/mekk\.feeds\.egg-info/
+^src/mekk\.greader\.egg-info/
 ^build/
 ^dist/
