@@ -1,0 +1,8 @@
+syntax: regexp
+
+~$
+semantic\.cache$
+\.py[co]$
+^src/mekk\.feeds\.egg-info/
+^build/
+^dist/
