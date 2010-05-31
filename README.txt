@@ -16,7 +16,7 @@ Warning
 =======
 
 No official documentation was used, I partially reverse-engineered
-it and partially used unofficial descriptions found on the web.
+the API and partially used unofficial descriptions found on the web.
 So there are absolutely no guarantees!
 
 Still, I regularly use this module to subscribe, unsubscribe and
