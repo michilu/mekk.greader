@@ -1,12 +1,32 @@
-Simple Google Reader access API (mainly feed management functions).
+============
+mekk.greader
+============
+
+Simple Google Reader access API. The module implements a couple of
+feed management functions, making it possible to manage Google Reader
+subscriptions (subscribe, unsubscribe, rename, (re)tag feeds) from
+Python scripts and programs.
+
+*I wrote the module to implement `greader2org`_ - the script which let
+me batch-modify my subscriptions.*
+
+.. _greader2org: http://blog.mekk.waw.pl/archives/31-Editing-Google-Reader-subscriptions-with-a-text-editor.html
+
+Warning
+=======
 
 No official documentation was used, I partially reverse-engineered
 it and partially used unofficial descriptions found on the web.
+So there are absolutely no guarantees!
 
-I use this module daily to subscribe, unsubscribe and rename feeds.
+Still, I regularly use this module to subscribe, unsubscribe and
+rename feeds.
 
-Source code is available on `BitBucket`_, use this page also to
-report bugs and offer patches.
+Sources, patches, bug reports
+=============================
+
+Source code is available on `BitBucket`_. The same page can be used
+for bug reporting and for patch submission.
 
 .. _BitBucket: http://bitbucket.org/Mekk/mekk.greader
 
