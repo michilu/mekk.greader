@@ -3,21 +3,25 @@
 
 from setuptools import setup, find_packages
 
-version = '1.1.1'
-long_description = open("README.txt").read()
-classifiers = [
+VERSION = '1.1.1'
+
+KEYWORDS = 'google reader client'
+DESCRIPTION = "Simple wrapper for Google Reader API."
+LONG_DESCRIPTION = open("README.txt").read()
+CLASSIFIERS = [
     "Programming Language :: Python",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    # TODO: Development Status, Environment, Topic
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
     ]
 
-setup(name='mekk.greader',
-      version=version,
-      description="Simple wrapper for Google Reader API.",
-      long_description=long_description,
-      classifiers=classifiers,
-      keywords='org',
+setup(name = 'mekk.greader',
+      version = VERSION,
+      description = DESCRIPTION,
+      long_description = LONG_DESCRIPTION,
+      classifiers = CLASSIFIERS,
+      keywords = KEYWORDS,
       license='BSD',
       author='Marcin Kasperski',
       author_email='Marcin.Kasperski@mekk.waw.pl',

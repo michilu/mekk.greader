@@ -27,8 +27,14 @@ TOKEN_VALID_TIME = 60
 #DUMP_REPLIES = True
 
 class GoogleLoginFailed(Exception):
+    """
+    Exception raised on login failure and other authorization problems.
+    """
     pass
 class GoogleOperationFailed(Exception):
+    """
+    Exception raised when Google rejects some operation.
+    """
     pass
 
 #SOURCE = 'my-small-script'
@@ -78,8 +84,8 @@ class GoogleReaderClient(object):
 
     def tag_id(self, tag):
         """
-        Converts tag name (say "Życie: Polityka" into 
-        tag id (say "user/-/label/Życie: Polityka").
+        Converts tag name (say "Life: Politics" into 
+        tag id (say "user/joe/label/Life: Politics").
         
         If parameter is already in this form, leaves it as-is
         """
@@ -88,6 +94,10 @@ class GoogleReaderClient(object):
         return tag
 
     def get_my_id(self):
+        """
+        Returns true user identifier to be used in API calls, calculating
+        it if necessary. Caches the result
+        """
         if self.my_id == '-':
             tl = self.get_tag_list()
             for vl in tl['tags']:
@@ -299,7 +309,8 @@ class GoogleReaderClient(object):
             self.cached_token_time = t
         return self.cached_token
 
-    def _get_atom(self, url, count = None, older_first = False, continue_from = None, format = 'obj'):
+    def _get_atom(self, url, count = None, 
+                  older_first = False, continue_from = None, format = 'obj'):
         """
         Actually get ATOM feed. url is base url (one of the state or label urls).
         count is the articles count (default 20), ordering_back set to False means older
@@ -326,7 +337,8 @@ class GoogleReaderClient(object):
         else:
             return r
 
-    def _change_feed(self, feed_url, operation, title = None, add_tag = None, remove_tag = None):
+    def _change_feed(self, feed_url, operation,
+                     title = None, add_tag = None, remove_tag = None):
         """
         Subscribe or unsubscribe
         """
@@ -393,7 +405,8 @@ class GoogleReaderClient(object):
         header = {'User-agent' : SOURCE}
         header['Authorization'] = 'GoogleLogin auth=%s' % self.session_id
         if post_data is not None:
-            true_data = [ (key, value.encode('utf-8')) for key, value in post_data.iteritems() ]
+            true_data = [ (key, value.encode('utf-8')) 
+                          for key, value in post_data.iteritems() ]
             true_data = urllib.urlencode(true_data)
         else:
             true_data = None
