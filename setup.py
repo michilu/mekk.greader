@@ -3,7 +3,7 @@
 
 from setuptools import setup, find_packages
 
-version = '1.1.0'
+version = '1.1.1'
 long_description = open("README.txt").read()
 classifiers = [
     "Programming Language :: Python",
