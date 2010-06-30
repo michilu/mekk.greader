@@ -283,7 +283,7 @@ class GoogleReaderClient(object):
 
         log.debug("Result: %s" % result)
 
-        sid = re.search('SID=(\S*)', result).group(1)
+        sid = re.search('Auth=(\S*)', result).group(1)
         if not sid:
             raise GoogleLoginFailed
         return sid
@@ -391,7 +391,7 @@ class GoogleReaderClient(object):
 
     def _make_call(self, url, post_data=None):
         header = {'User-agent' : SOURCE}
-        header['Cookie']='Name=SID;SID=%s;Domain=.google.com;Path=/;Expires=160000000000' % self.session_id
+        header['Authorization'] = 'GoogleLogin auth=%s' % self.session_id
         if post_data is not None:
             true_data = [ (key, value.encode('utf-8')) for key, value in post_data.iteritems() ]
             true_data = urllib.urlencode(true_data)
