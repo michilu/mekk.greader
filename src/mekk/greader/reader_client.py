@@ -248,7 +248,7 @@ class GoogleReaderClient(object):
         """
         Removes tag as a whole
         """
-        url = TAG_DISABLE_URL +  '?client=%s' % SOURCE
+        url = TAG_DISABLE_URL + '?client=%s' % SOURCE
         post_data = {
             's' : self.tag_id(tag),
             'ac' : 'disable-tags',
