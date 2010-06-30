@@ -166,7 +166,7 @@ class GoogleReaderClient(object):
 
         get_fresh_atom is equivalent to get_instate_atom('fresh') and so on.
         """
-        return self._get_atom(IN_STATE_URL % 'state', **kwargs)
+        return self._get_atom(IN_STATE_URL % state, **kwargs)
 
 
     ############################################################
