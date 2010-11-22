@@ -7,11 +7,6 @@ feed management functions, making it possible to manage Google Reader
 subscriptions (subscribe, unsubscribe, rename, (re)tag feeds) from
 Python scripts and programs.
 
-*I wrote the module to implement `greader2org`_ - the script which let
-me batch-modify my subscriptions.*
-
-.. _greader2org: http://blog.mekk.waw.pl/archives/31-Editing-Google-Reader-subscriptions-with-a-text-editor.html
-
 Warning
 =======
 
@@ -20,7 +15,10 @@ the API and partially used unofficial descriptions found on the web.
 So there are absolutely no guarantees!
 
 Still, I regularly use this module to subscribe, unsubscribe and
-rename feeds.
+rename feeds, especially via greader2org_.
+
+.. _greader2org: http://blog.mekk.waw.pl/archives/31-Editing-Google-Reader-subscriptions-with-a-text-editor.html
+
 
 Sources, patches, bug reports
 =============================
