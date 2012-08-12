@@ -51,6 +51,7 @@ PREFERENCE_LIST_URL = READER_URL + '/api/0/preference/list'
 UNREAD_COUNT_URL = READER_URL + '/api/0/unread-count'
 SUBSCRIPTION_LIST_URL = READER_URL + '/api/0/subscription/list'
 SUBSCRIPTION_EDIT_URL = READER_URL + '/api/0/subscription/edit'
+SUBSCRIPTION_QUICKADD_URL = READER_URL + '/api/0/subscription/quickadd'
 TAG_EDIT_URL = READER_URL + '/api/0/edit-tag'
 TAG_DISABLE_URL = READER_URL + '/api/0/disable-tag'
 SEARCH_ITEMS_IDS_URL = READER_URL + '/api/0/search/items/ids'
@@ -246,6 +247,17 @@ class GoogleReaderClient(object):
 
     ############################################################
     # Public API - subscription modifications
+
+    def subscribe_quickadd(self, site_url):
+        """
+        Subscribe to given site url.
+        """
+        url = SUBSCRIPTION_QUICKADD_URL + "?" \
+              + urllib.urlencode({"ck": int(time.mktime(datetime.now().timetuple())),
+                                  "client": SOURCE})
+        post_params = [("quickadd", site_url)]
+        post_params.append(("T", self._get_token()))
+        return json.loads(self._make_call(url, post_params))
 
     def subscribe_feed(self, feed_url, title = None):
         """
