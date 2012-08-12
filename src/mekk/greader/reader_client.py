@@ -54,6 +54,7 @@ SUBSCRIPTION_EDIT_URL = READER_URL + '/api/0/subscription/edit'
 TAG_EDIT_URL = READER_URL + '/api/0/edit-tag'
 TAG_DISABLE_URL = READER_URL + '/api/0/disable-tag'
 SEARCH_ITEMS_IDS_URL = READER_URL + '/api/0/search/items/ids'
+STREAM_ITEMS_CONTENTS_URL = READER_URL + '/api/0/stream/items/contents'
 IN_STATE_URL = READER_URL + '/atom/user/-/state/com.google/%s'
 GET_FEED_URL = READER_URL + '/atom/feed/'
 READING_TAG_URL = READER_URL + '/atom/%s'
@@ -200,6 +201,15 @@ class GoogleReaderClient(object):
             return json.loads(self._make_call(url))
         else:
             return self._make_call(url)
+
+    def contents(self, ids):
+        url = STREAM_ITEMS_CONTENTS_URL + "?" \
+              + urllib.urlencode({"ck": int(time.mktime(datetime.now().timetuple())),
+                                  "client": SOURCE})
+        post_params = [("i", id_) for id_ in ids]
+        post_params.extend([("it", "0")] * len(post_params))
+        post_params.append(("T", self._get_token()))
+        return json.loads(self._make_call(url, post_params))
 
 
     ############################################################
