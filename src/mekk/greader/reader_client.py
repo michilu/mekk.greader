@@ -13,7 +13,7 @@ Klient Google Readera
 import urllib
 import urllib2
 import re
-import simplejson
+import json
 import time
 from lxml import etree, objectify
 
@@ -395,7 +395,7 @@ class GoogleReaderClient(object):
 
     def _get_list(self, url, format):
         if format == 'obj':
-            return simplejson.loads(
+            return json.loads(
                 self._make_call(url + '?output=json'))
         else:
             return self._make_call(url + '?output=' + format)
