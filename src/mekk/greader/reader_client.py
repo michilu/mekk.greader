@@ -15,6 +15,7 @@ import urllib2
 import re
 import json
 import time
+from datetime import datetime
 from lxml import etree, objectify
 
 import logging
@@ -52,6 +53,7 @@ SUBSCRIPTION_LIST_URL = READER_URL + '/api/0/subscription/list'
 SUBSCRIPTION_EDIT_URL = READER_URL + '/api/0/subscription/edit'
 TAG_EDIT_URL = READER_URL + '/api/0/edit-tag'
 TAG_DISABLE_URL = READER_URL + '/api/0/disable-tag'
+SEARCH_ITEMS_IDS_URL = READER_URL + '/api/0/search/items/ids'
 IN_STATE_URL = READER_URL + '/atom/user/-/state/com.google/%s'
 GET_FEED_URL = READER_URL + '/atom/feed/'
 READING_TAG_URL = READER_URL + '/atom/%s'
@@ -178,6 +180,26 @@ class GoogleReaderClient(object):
         get_fresh_atom is equivalent to get_instate_atom('fresh') and so on.
         """
         return self._get_atom(IN_STATE_URL % state, **kwargs)
+
+    ############################################################
+    # Public API - item
+
+    def search_ids(self, query, format="obj"):
+        if format == 'obj':
+            output = "json"
+        else:
+            output = format
+        url = SEARCH_ITEMS_IDS_URL + "?"\
+              + urllib.urlencode({"q": query,
+                                  "num": "1000",
+                                  "output": output,
+                                  "ck": int(time.mktime(datetime.now().timetuple())),
+                                  "client": SOURCE,
+                                 })
+        if format == 'obj':
+            return json.loads(self._make_call(url))
+        else:
+            return self._make_call(url)
 
 
     ############################################################
