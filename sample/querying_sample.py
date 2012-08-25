@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Prosty test
+mekk.greader example - reading some feed information
 """
 
 from mekk.greader import GoogleReaderClient, GoogleLoginFailed
@@ -76,29 +76,4 @@ pprint( reader_client.get_preference_list('json') )
 title("Unread count")
 pprint( reader_client.get_unread_count() )
 
-############################################################
-# Example calls - info updating, feed detail
-############################################################
-
-test_feed = 'http://rss.gazeta.pl/pub/rss/sport.xml'
-test_tag = "Just a test tag"
-
-title("Subscribing")
-
-reader_client.subscribe_feed(test_feed, u"Sport Gazetą Zażółć")
-reader_client.add_feed_tag(test_feed, u"Sport Bis", test_tag)
-
-title("Reading feed information")
-feed_detail = reader_client.get_feed_atom(test_feed, count = 2)
-print feed_detail.generator
-print feed_detail.entry.id
-print feed_detail.entry[1].id
-print feed_detail.entry.category.get('term')
-
-title("Updating")
-reader_client.remove_feed_tag(test_feed, u"Sport Tris", test_tag)
-reader_client.change_feed_title(test_feed, u"Zmieniony tytuł Sport")
-
-title("Unsubscribing")
-reader_client.unsubscribe_feed(test_feed)
-
+# See also feed_mgmt_sample for reading feed content with get_feed_atom
