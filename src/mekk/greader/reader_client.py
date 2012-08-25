@@ -20,7 +20,8 @@ from lxml import etree, objectify
 
 import logging
 log = logging.getLogger("reader")
-RANGE_OF_LOG_STRING = 100
+
+TRIM_LOG_MESSAGES_AT = 100
 
 TOKEN_VALID_TIME = 60
 #DUMP_REQUESTS = True
@@ -344,7 +345,7 @@ class GoogleReaderClient(object):
                 raise
         result = f.read()
 
-        log.debug("Result: %s" % result[:RANGE_OF_LOG_STRING])
+        log.debug("Result: %s" % result[:TRIM_LOG_MESSAGES_AT])
 
         sid = re.search('Auth=(\S*)', result).group(1)
         if not sid:
@@ -468,14 +469,14 @@ class GoogleReaderClient(object):
         if log.isEnabledFor("info"):
             if post_data:
                 log.info("Calling %s with parameters:\n    %s" % (
-                        request.get_full_url(), str(post_data)[:RANGE_OF_LOG_STRING]))
+                        request.get_full_url(), str(post_data)[:TRIM_LOG_MESSAGES_AT]))
             else:
                 log.info("Calling %s" % request.get_full_url())
 
         f = urllib2.urlopen( request )
         result = f.read()
 
-        log.debug("Result: %s" % result[:RANGE_OF_LOG_STRING])
+        log.debug("Result: %s" % result[:TRIM_LOG_MESSAGES_AT])
 
         return result
 
