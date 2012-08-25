@@ -101,3 +101,19 @@ reader_client.change_feed_title(test_feed, u"Zmieniony tytuł Sport")
 title("Unsubscribing")
 reader_client.unsubscribe_feed(test_feed)
 
+title("Subscribing via site url")
+feeds_to_clean = []
+for attempt in ['http://sport.pl', 'http://sport.interia.pl']:
+    reply= reader_client.subscribe_quickadd("http://sport.pl")
+    if reply['numResults']:
+        print "Subscribe succesfull"
+        print "Feed id:", reply['streamId']
+        feeds_to_clean.append(reply['streamId'].replace("feed/", "", 1))
+    else:
+        print "Subscribe failed to find a feed"
+
+if feeds_to_clean:
+    title("Unsubscribing just subscribed")
+    for feed in feeds_to_clean:
+        print "  ", feed
+        reader_client.unsubscribe_feed(feed)

@@ -252,17 +252,42 @@ class GoogleReaderClient(object):
     def subscribe_quickadd(self, site_url):
         """
         Subscribe to given site url.
+
+        Note: site_url is a normal address of website, Google Reader
+        will try to autodetect feed address.
+
+        Method returns a dictionary describing the call results.
+        In succesfull case it may look like:
+
+            {
+             u'numResults': 1,
+             u'query': u'http://sport.pl',
+             u'streamId': u'feed/http://rss.gazeta.pl/pub/rss/sport.xml'
+            }
+
+        In failed case (feed not found) it may look like:
+
+            {
+             u'numResults': 0,
+             u'query': u'http://sport.interia.pl',
+            }
+
         """
         url = SUBSCRIPTION_QUICKADD_URL + "?" \
               + urllib.urlencode({"ck": int(time.mktime(datetime.now().timetuple())),
                                   "client": SOURCE})
-        post_params = [("quickadd", site_url)]
-        post_params.append(("T", self._get_token()))
+        post_params = {
+            "quickadd": site_url,
+            "T": self._get_token(),
+            }
         return json.loads(self._make_call(url, post_params))
 
     def subscribe_feed(self, feed_url, title = None):
         """
-        Subscribe to given feed. Optionally set title
+        Subscribe to given feed. Optionally set title.
+
+        Note: feed should specify RSS/Atom url. See subscribe_quickadd for
+        alternate method.
         """
         return self._change_feed(feed_url, 'subscribe', title = title)
 
