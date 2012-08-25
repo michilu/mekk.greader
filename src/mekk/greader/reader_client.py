@@ -40,8 +40,8 @@ class GoogleOperationFailed(Exception):
     """
     pass
 
-#SOURCE = 'my-small-script'
-SOURCE = 'mekk'
+# User-agent/client-name
+SOURCE = 'mekk.reader_client'
 
 GOOGLE_URL = 'http://www.google.com'
 READER_URL = GOOGLE_URL + '/reader'
@@ -131,7 +131,24 @@ class GoogleReaderClient(object):
 
     def get_feed_atom(self, url, **kwargs):
         """
-        Atom feed for any feed. Works also for unsubscribed feeds
+        Atom feed for any feed. Works also for unsubscribed feeds.
+
+        Handled named parameters:
+
+        format: how should the reply be returned. Can be:
+            'xml' (raw xml text),
+            'etree' (lxml.etree object), or
+            'obj' (lxml.objectify object).
+          If not specified, 'obj' is default.
+
+        count: how many articles to get (default 20),
+
+        older_first: if specified and set to True, means returning older articles
+              first
+
+        continue_from: start from given article instead of the first one
+              (handle paging). Parameter given here should be taken from
+               <gr:continuation> value from the reply obtained earlier.
         """
         return self._get_atom(GET_FEED_URL + url,
                               **kwargs)
@@ -139,18 +156,27 @@ class GoogleReaderClient(object):
     def get_reading_list_atom(self, **kwargs):
         """
         Atom feed of unread items
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         return self.get_instate_atom('reading-list', **kwargs)
 
     def get_read_atom(self, **kwargs):
         """
         Atom feed of (recent) read items
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         return self.get_instate_atom('read', **kwargs)
 
     def get_tagged_atom(self, tag, **kwargs):
         """
         Atom feed of (unread?) items for given tag
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         tagged_url = READING_TAG_URL % self.tag_id(tag)
         return self._get_atom(tagged_url, **kwargs)
@@ -158,18 +184,27 @@ class GoogleReaderClient(object):
     def get_starred_atom(self, **kwargs):
         """
         Atom feed of starred items
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         return self.get_instate_atom('starred', **kwargs)
 
     def get_fresh_atom(self, **kwargs):
         """
         Atom feed of fresh (newly added) items
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         return self.get_instate_atom('fresh', **kwargs)
 
     def get_broadcast_atom(self, **kwargs):
         """
         Atom feed of public (shared) items
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         return self.get_instate_atom('broadcast', **kwargs)
 
@@ -182,6 +217,9 @@ class GoogleReaderClient(object):
         tracking-item-link-used, tracking-kept-unread
 
         get_fresh_atom is equivalent to get_instate_atom('fresh') and so on.
+
+        Handles the same named parameters as get_feed_atom
+        (format, count, older_first, continue_from).
         """
         return self._get_atom(IN_STATE_URL % state, **kwargs)
 
@@ -392,7 +430,7 @@ class GoogleReaderClient(object):
                   older_first = False, continue_from = None, format = 'obj'):
         """
         Actually get ATOM feed. url is base url (one of the state or label urls).
-        count is the articles count (default 20), ordering_back set to False means older
+        count is the articles count (default 20), older_first set to True means older
         first, continue_from can be set to gr:continuation value from the feed to
         grab more items
 
@@ -481,11 +519,25 @@ class GoogleReaderClient(object):
         
 
     def _make_call(self, url, post_data=None):
+        """
+        Actually executes a call to given url, adding authorization headers
+        and parameters.
+        
+        post_data can be either a dictionary, or list of (key, value)
+        pairs. In both cases value should be unicode (and will be encoded
+        to utf-8 inside this method).
+        """
         header = {'User-agent' : SOURCE}
         header['Authorization'] = 'GoogleLogin auth=%s' % self.session_id
         if post_data is not None:
-            true_data = [ (key, value.encode('utf-8')) 
-                          for key, value in post_data.iteritems() ]
+            if type(post_data) is list:
+                true_data = [
+                    (key, value.encode('utf-8')) 
+                    for key, value in post_data ]
+            else:
+                true_data = [
+                    (key, value.encode('utf-8')) 
+                    for key, value in post_data.iteritems() ]
             true_data = urllib.urlencode(true_data)
         else:
             true_data = None
