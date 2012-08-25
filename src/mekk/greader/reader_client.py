@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Klient Google Readera
+Google Reader client.
 """
 
-# Mocno inspirowane (z kopiowaniem sporych fragmentów kodu włącznie):
+# Inspired by (including copying some code snippets):
 # http://blog.gpowered.net/2007/08/google-reader-api-functions.html
 #
-# Kluczowe informacje:
+# Key information:
 # http://code.google.com/p/pyrfeed/wiki/GoogleReaderAPI
 
 import urllib
