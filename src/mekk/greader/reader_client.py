@@ -7,8 +7,11 @@ Google Reader client.
 # Inspired by (including copying some code snippets):
 # http://blog.gpowered.net/2007/08/google-reader-api-functions.html
 #
-# Key information:
+# Key information I used initially:
 # http://code.google.com/p/pyrfeed/wiki/GoogleReaderAPI
+#
+# More docs, not yet fully consumed:
+# http://undoc.in/googlereader.html#search-items-ids
 
 import urllib
 import urllib2
@@ -226,37 +229,62 @@ class GoogleReaderClient(object):
     ############################################################
     # Public API - item
 
-    def search_ids(self, query, format="obj"):
-        if format == 'obj':
-            output = "json"
-        else:
-            output = format
-        url = SEARCH_ITEMS_IDS_URL + "?"\
-              + urllib.urlencode({"q": query,
-                                  "num": "1000",
-                                  "output": output,
-                                  "ck": int(time.mktime(datetime.now().timetuple())),
-                                  "client": SOURCE,
-                                 })
-        if format == 'obj':
-            return json.loads(self._make_call(url))
-        else:
-            return self._make_call(url)
+    def search_for_articles(self, query, count=20):
+        """
+        Searches for articles using given text query.
+        Returns plain list like:
 
-    def contents(self, ids):
+           [ u'7212740130471148824',
+             u'-8654279325215116158',
+             u'8121555931508499120',
+           ]
+
+        Those are short article(entry) identifiers
+        (note that reader also sometimes uses long form
+         'tag:google.com,2005:reader/item/5d0cfa30041d4348',
+         every reader api which requires article id
+         should handle both forms fine)
+        """
+        output = "json"
+        url = SEARCH_ITEMS_IDS_URL + "?"\
+              + urllib.urlencode({
+                "q": query,
+                "num": count,
+                "output": output,
+                "ck": int(time.mktime(datetime.now().timetuple())),
+                "client": SOURCE,
+                })
+        reply = json.loads(self._make_call(url))
+        return [ item['id'] for item in reply['results'] ]
+
+    def article_contents(self, ids):
+        """
+        Return article (entry) contents of specified articles. ids is
+        a list of identifiers (for example extracted from feed, or
+        returned from search_for_articles).
+
+        Returned structure is a complicated recursive dictionary
+        of which ['items'] list may be of biggest interest. Dump it for
+        details.
+        """
         url = STREAM_ITEMS_CONTENTS_URL + "?" \
               + urllib.urlencode({"ck": int(time.mktime(datetime.now().timetuple())),
                                   "client": SOURCE})
         post_params = [("i", id_) for id_ in ids]
-        post_params.extend([("it", "0")] * len(post_params))
+        #post_params.extend([("it", "0")] * len(post_params))
         post_params.append(("T", self._get_token()))
         return json.loads(self._make_call(url, post_params))
 
-    def contents_feed(self, feed_url, count=20):
+    def feed_contents(self, feed_url, count=20, older_first=False):
+        """
+        Returns list of articles belonging to given feed.
+        """
         url = STREAM_CONTENTS_FEED_URL % urllib.quote_plus(feed_url) + "?" \
-              + urllib.urlencode({"ck": int(time.mktime(datetime.now().timetuple())),
-                                  "n": count,
-                                  "client": SOURCE})
+              + urllib.urlencode({
+                "ck": int(time.mktime(datetime.now().timetuple())),
+                "n": count,
+                "r": (older_first and "o" or "d"),
+                "client": SOURCE})
         return json.loads(self._make_call(url))
 
 
