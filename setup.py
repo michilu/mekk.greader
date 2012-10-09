@@ -3,7 +3,7 @@
 
 from setuptools import setup, find_packages
 
-VERSION = '1.2.0'
+VERSION = '1.2.1'
 
 KEYWORDS = 'google reader client'
 DESCRIPTION = "Simple wrapper for Google Reader API."
