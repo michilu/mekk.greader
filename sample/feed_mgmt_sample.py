@@ -48,7 +48,8 @@ def get_username_and_password(force_fresh_input = False):
 try:
     username, password = get_username_and_password()
     reader_client = GoogleReaderClient(username, password)
-except GoogleLoginFailed:
+except GoogleLoginFailed as e:
+    print "Google login failed:", e
     username, password = get_username_and_password(True)
     reader_client = GoogleReaderClient(username, password)
 

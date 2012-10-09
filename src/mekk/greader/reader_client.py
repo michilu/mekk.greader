@@ -429,9 +429,9 @@ class GoogleReaderClient(object):
 
         try:
             f = urllib2.urlopen( request )
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             if e.code == 403:
-                raise GoogleLoginFailed
+                raise GoogleLoginFailed("%s (%s)" % (e.reason, e.read()))
             else:
                 raise
         result = f.read()
