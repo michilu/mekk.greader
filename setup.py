@@ -2,8 +2,8 @@
 # (c) 2008, Marcin Kasperski
 
 from setuptools import setup, find_packages
-
-VERSION = '1.2.1'
+import os
+execfile(os.path.join(os.path.dirname(__file__), "src", "mekk", "greader", "version.py"))
 
 KEYWORDS = 'google reader client'
 DESCRIPTION = "Simple wrapper for Google Reader API."
